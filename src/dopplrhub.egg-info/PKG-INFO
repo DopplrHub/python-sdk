@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: dopplrhub
-Version: 0.1.0
+Version: 1.0.0
 Summary: Python SDK for the DopplrHub public API
 Author: DopplrHub
 License: Proprietary
@@ -64,14 +64,23 @@ api = DopplrHub("YOUR_API_KEY", "https://api.dopplrhub.com/api/v1")
     .wait()
     .download("./scan.docx"))
 
-(api.tools.image("./hero.png", "resize", {
-    "width": 1920,
-    "height": 1080,
-    "fit": "cover",
-    "outputFormat": "webp",
-})
+(api.tools.image_resize(
+    "./hero.png",
+    width=1920,
+    height=1080,
+    fit="cover",
+    output_format="webp",
+)
     .wait()
     .download("./hero.webp"))
+
+(api.tools.pdf_compress("./packet.pdf", "screen")
+    .wait()
+    .download("./packet-compressed.pdf"))
+
+(api.tools.video_trim("./clip.mp4", start_time=3, end_time=12, output_format="mp4")
+    .wait()
+    .download("./clip-trimmed.mp4"))
 
 api.tools.ada("./brochure.pdf").download("./brochure-ada-report.pdf")
 api.tools.ats(
@@ -83,7 +92,33 @@ api.tools.ats(
 (api.tools.archive(["./a.txt", "./b.txt"], "zip", archive_name="documents")
     .wait()
     .download("./documents.zip"))
+
+(api.tools.social_resize(
+    "./hero.png",
+    platform="instagram",
+    selected_size_ids=["post-square", "story"],
+    output_format="jpg",
+)
+    .wait()
+    .download("./hero-instagram.zip"))
+
+result = api.tools.ats_reexport(report, "modern", download_as="resume-modern.docx")
+result.download("./resume-modern.docx")
 ```
+
+Tool coverage in the Python SDK includes `ocr`, `pdf`, `image`, `video`, `ada`, `ats`, `ats_reexport`, `archive`, and `social_resize` on `api.tools`.
+
+## Examples
+
+- `examples/convert_local_file.py`
+- `examples/convert_remote_file.py`
+- `examples/ocr_tool.py`
+- `examples/pdf_tool.py`
+- `examples/image_tool.py`
+- `examples/video_tool.py`
+- `examples/ada_tool.py`
+- `examples/ats_tool.py`
+- `examples/tools_and_utilities.py`
 
 ## Utilities
 
