@@ -1,0 +1,103 @@
+Metadata-Version: 2.4
+Name: dopplrhub
+Version: 0.1.0
+Summary: Python SDK for the DopplrHub public API
+Author: DopplrHub
+License: Proprietary
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: requests>=2.31.0
+
+# DopplrHub Python SDK
+
+A Python SDK for the current DopplrHub public API, including generic conversions, tools, and utility endpoints.
+
+## Install
+
+```bash
+pip install dopplrhub
+```
+
+For this local scaffold:
+
+```bash
+cd D:\AudioConverter\sdk\python
+pip install -e .
+```
+
+If you want to distribute the SDK directly from the backend, this workspace will expose a zip bundle at `/api/sdk/python-sdk.zip`.
+
+## Local file conversion
+
+```python
+from dopplrhub import DopplrHub
+
+api = DopplrHub("YOUR_API_KEY", "https://api.dopplrhub.com/api/v1")
+
+(api.start("./input.pdf", "jpg")
+    .wait()
+    .download("./input.jpg")
+    .delete())
+```
+
+## Remote file conversion
+
+```python
+from dopplrhub import DopplrHub
+
+api = DopplrHub("YOUR_API_KEY", "https://api.dopplrhub.com/api/v1")
+
+(api.start_from_url("https://example.com/brochure.pdf", "png")
+    .wait()
+    .download("./brochure.png")
+    .delete())
+```
+
+## Tools
+
+```python
+from dopplrhub import DopplrHub
+
+api = DopplrHub("YOUR_API_KEY", "https://api.dopplrhub.com/api/v1")
+
+(api.tools.ocr("./scan.pdf", "ocr-docx", language="eng")
+    .wait()
+    .download("./scan.docx"))
+
+(api.tools.image("./hero.png", "resize", {
+    "width": 1920,
+    "height": 1080,
+    "fit": "cover",
+    "outputFormat": "webp",
+})
+    .wait()
+    .download("./hero.webp"))
+
+api.tools.ada("./brochure.pdf").download("./brochure-ada-report.pdf")
+api.tools.ats(
+    "./resume.pdf",
+    "Senior Python engineer with API design experience",
+    industry="technology",
+).download("./resume-optimized.docx")
+
+(api.tools.archive(["./a.txt", "./b.txt"], "zip", archive_name="documents")
+    .wait()
+    .download("./documents.zip"))
+```
+
+## Utilities
+
+```python
+from dopplrhub import DopplrHub
+
+api = DopplrHub("YOUR_API_KEY", "https://api.dopplrhub.com/api/v1")
+
+formats = api.utilities.supported_formats()
+rates = api.utilities.currency_rates("USD")
+api.utilities.batch_download(["JOB_ID_1", "JOB_ID_2"], "./converted_files.zip")
+```
+
+## Important behavior note
+
+`start_from_url()` currently downloads the remote resource first, then uploads it into DopplrHub.
+It does not perform headless browser webpage rendering.

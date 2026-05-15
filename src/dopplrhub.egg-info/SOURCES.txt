@@ -1,0 +1,11 @@
+README.md
+pyproject.toml
+src/dopplrhub/__init__.py
+src/dopplrhub/client.py
+src/dopplrhub/exceptions.py
+src/dopplrhub/models.py
+src/dopplrhub.egg-info/PKG-INFO
+src/dopplrhub.egg-info/SOURCES.txt
+src/dopplrhub.egg-info/dependency_links.txt
+src/dopplrhub.egg-info/requires.txt
+src/dopplrhub.egg-info/top_level.txt
